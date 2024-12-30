@@ -1,1 +1,334 @@
-123456
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="ProgId" content="Excel.Sheet">
+	<meta name="Generator" content="WPS Office ET">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge chrome=1">
+	<title>现场点餐</title>
+	<script src="./js/tailwindcss.js"></script>
+	<script type="application/javascript" src="./js/jquery-3.7.1.min.js.js"></script>
+	<style>
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			background: #f9f9f9;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			user-select: none;
+			font-size: 16px !important; 
+		}
+		div::-webkit-scrollbar {
+			display: none;
+		}
+		.avatarTag::before{content: "";width: 75%;height: 4px;position: absolute;bottom: 0;left: 0;background-color: #2260FF;}
+		.avatarTag::after{content: "";width: 23%;height: 4px;position: absolute;bottom: 0;right: 0;background-color: #E66123;}
+		.avatar{width: 130px;height: 130px;border-radius: 50%;background-color: #fff;overflow: hidden;position: relative;}
+		.avatar img{width: 100%;height: 100%;border-radius: 50%;background-color: #ccc;}
+
+		.balance{background-color: #2260FF;position: relative;}
+		.balance::before{content: "";width: 10px;height: 10px;position: absolute;top: 10px;right: 10px;background: rgba(255,255,255,1);border-radius: 50%;}
+		
+		.tabs{border-radius: 32px;}
+		.tabs>div{width: 16.66%;height: 50px;position: relative;z-index: 9;}
+		.tabs div.active{color: #2260FF;font-weight: bold;}
+		.tabs .active_bg{position: absolute;z-index: 6;left: 8px;top: 8px;width: 16.66%;height: 50px;background-color: #fff;color: #2260FF;border-radius: 25px;box-shadow: 0px 0px 10px 0px rgba(10,24,58,0.1);}
+	
+		.food_list .single{width: 32%;margin-right: 2%;margin-bottom: 20px;height: 183.6px;}
+		.food_list .single:nth-child(3n){margin-right: 0;}
+		.cal .reduce{width: 50px;height: 50px;border-radius: 50%;background-color: #F0F0F0;}
+		.cal .add{width: 50px;height: 50px;border-radius: 50%;background-color: #F0F0F0;}
+		.cal .add.active{width: 50px;height: 50px;border-radius: 50%;background-color: #2260FF;color: #fff;}
+		.cal2 .reduce{width: 30px;height: 30px;border-radius: 50%;background-color: #F0F0F0;}
+		.cal2 .add{width: 30px;height: 30px;border-radius: 50%;background-color: #2260FF;}
+
+		.result_bottom{position: absolute;bottom: 0;left: 0;width: 100%;;}
+		.pay_btn{background-color: #2260FF;}
+
+		.loading-container {
+			width: 80px;
+			height: 80px;
+			position: relative; /* Needed for absolute positioning of children */
+			margin: 20px auto; /* Center the container */
+		}
+
+			.loading-spinner {
+			border: 4px solid #f3f3f3; /* Light grey */
+			border-top: 4px solid #3498db; /* Blue */
+			border-radius: 50%;
+			width: 100%;
+			height: 100%;
+			animation: spin 2s linear infinite; /* Animate the spinner */
+		}
+
+		.loading-text {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			font-size: 14px;
+			color: #333;
+		}
+
+
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+	</style>
+</head>
+
+<body class="w-full h-full flex flex-col popup">
+	<div class="flex items-center justify-between w-full py-3 px-10 bg-white border-b border-gray-200">
+		<div><img src="./img/logo.png" width="295px" alt="logo"></div>
+		<div class="close cursor-pointer"><img src="./img/close.png" width="40px" alt="close"></div>
+	</div>
+	<div class="flex h-full justify-between flex-1" style="height: 0;">
+		<div class="w-2/12 flex flex-col items-center justify-between pt-3" style="width: 250px !important;">
+			<div class="avatarTag flex flex-col items-center justify-center px-8 py-5 w-full flex-shrink-0 relative">
+				<div class="avatar mb-5"><img src="./img/avatar.png" alt="avatar"></div>
+				<p class="text-2xl text-black font-bold mb-1">欧阳杨菲菲  |   女</p>		
+				<p class="text-2xl text-black font-bold">183  0852  6930</p>			
+			</div>
+			<div class="px-8 flex flex-col flex-1 w-full" style="height: 0;">
+				<div class="flex flex-col border-b border-gray-200 py-5 mb-5 text-black text-lg">
+					<div class="font-bold  mb-1">基础信息：</div>
+					<div class="mb-1">年龄：75岁</div>
+					<div class="mb-1">民族：苗族</div>
+					<div class="mb-1">身高：168cm</div>
+					<div class="mb-1">体重：62kg</div>
+					<div class="mb-1">血型：B血型</div>
+				</div>
+				<div class="flex flex-col text-black text-lg h-full overflow-y-auto">
+					<div class="font-bold mb-1">关联亲属信息：</div>
+					<div class="flex-1 overflow-y-auto" style="height: 0;">
+						<div class="mb-3 border-b border-gray-200">
+							<div class="mb-1">姓名：王玉婷</div>
+							<div class="mb-1">关系：孙女</div>
+							<div class="mb-3">电话：17208507917</div>
+						</div>
+						<div class="mb-3 border-b border-gray-200">
+							<div class="mb-1">姓名：王玉婷</div>
+							<div class="mb-1">关系：孙女</div>
+							<div class="mb-3">电话：17208507917</div>
+						</div>
+						<div class="mb-3 border-b border-gray-200">
+							<div class="mb-1">姓名：王玉婷</div>
+							<div class="mb-1">关系：孙女</div>
+							<div class="mb-3">电话：17208507917</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="px-8 py-4 font-bold w-full flex-shrink-0">
+				<div class="balance rounded-xl py-2 px-3">
+					<div class="text-lg text-white mb-2">账户余额</div>
+					<div class="flex items-end bg-white rounded-xl py-2 px-3 text-333">
+						<div class="text-2xl">￥</div>
+						<div class="text-3xl">1580.00</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="border-x border-gray-200 px-4 py-5 flex flex-col flex-1" style="background-color: #f0f0f0;">
+			<div class="p-2 relative tabs text-lg font-medium flex items-center justify-between cursor-pointer" style="background-color: #f6f6f7;">
+				<div class="active flex items-center justify-center">全部</div>
+				<div class="flex items-center justify-center">特色菜</div>
+				<div class="flex items-center justify-center">炒菜类</div>
+				<div class="flex items-center justify-center">蔬菜类</div>
+				<div class="flex items-center justify-center">汤羹类</div>
+				<div class="flex items-center justify-center">其他</div>
+				<span class="active_bg"></span>
+			</div>
+			<div class="food_list mt-5 flex content-start flex-wrap overflow-y-auto flex-1" style="height: 0;">
+				<!-- 全部 -->
+				<!--获取的列表-->
+				<div class="loading flex content-center justify-center py-5 w-full">
+					<div class="loading-container">
+						<div class="loading-spinner"></div>
+						<div class="loading-text">Loading...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bg-white relative flex flex-col" style="width: 368px !important;">
+			<div class="px-8 text-2xl font-bold py-6">已点菜品</div>
+			<div class="px-8 flex flex-col flex-1 overflow-y-auto total_list" style="height: 0;">
+				<!-- 已点菜品 -->
+				
+			</div>
+			<div class="bg-white border-b border-gray-200 flex-shrink-0">
+				<div class="overflow-hidden flex items-center justify-between py-4 px-5" style="background: #ECF2F7;">
+					<div class="text-xl text-gray-900  font-bold">合计</div>
+					<div class="text-blue-600 font-bold">
+						<span class="text-xl font-normal">￥</span>
+						<span class="total_price text-3xl">0.00</span>
+					</div>
+				</div>
+				<div class="flex justify-center items-center p-5">
+					<div class="pay_btn flex flex-1 items-center justify-center rounded-xl text-lg text-white h-14">结算</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+$(function(){
+	var total_list = [];
+	var total_price = 0;
+	var flag = true;
+	//tab切换
+	$('.tabs div').click(function(){
+		$('.food_list .single').remove();
+		$('.loading').show();
+		getFoodList();
+		$(this).addClass('active').siblings().removeClass('active');
+		var index = $(this).index();
+		var width = $('.tabs').width() / 6;
+		$('.active_bg').animate({left: (index*width)+8}, 300);
+	})
+	//左边列表点击事件
+	//加减号
+	$('.food_list').on('click','.reduce',function(){
+		var id = $(this).closest('.single').attr('ref');
+		var price = $(this).attr('ref');
+		var imgs = $(this).closest('.single').find('img').attr('src');
+		var name = $(this).closest('.single').find('.single_name').text();
+		var num = parseInt($(this).siblings('.result').text());
+		if(num > 0){
+			if(num == 1){
+				$(this).siblings('.add').removeClass('active');
+			}
+			num--;
+			$(this).siblings('.result').text(num);
+			//设置右边列表
+			setRightList(id,imgs,name,price);
+			//计算价格
+			var price = $(this).attr('ref');
+			valid_price(price,'reduce');
+		}else{
+			num = 0;
+			$(this).siblings('.add').removeClass('active');
+			$(this).siblings('.result').text(num);
+		}
+	})
+	$('.food_list').on('click','.add',function(){
+		$(this).addClass('active');
+		var id = $(this).closest('.single').attr('ref');
+		var price = $(this).attr('ref');
+		var imgs = $(this).closest('.single').find('img').attr('src');
+		var name = $(this).closest('.single').find('.single_name').text();
+		var num = parseInt($(this).siblings('.result').text());
+		num++;		
+		$(this).siblings('.result').text(num);	
+		//设置右边列表
+		setRightList(id,imgs,name,price);
+		//计算价格
+		valid_price(price,'add');
+	})
+	//////////////////////////////////////////////////////////////
+	//右边列表点击事件
+	//加减号
+	$('.total_list').on('click','.reduce',function(){
+		var num = parseInt($(this).siblings('.result').text());
+		if(num > 0){
+			if(num == 1){
+				$(this).siblings('.add').removeClass('active');
+				$(this).closest('.right_single').remove();
+			}
+			num--;
+			$(this).siblings('.result').text(num);
+			//计算价格
+			var price = $(this).attr('ref');
+			valid_price(price,'reduce');
+		}else{
+			num = 0;
+			$(this).siblings('.add').removeClass('active');
+			$(this).siblings('.result').text(num);
+		}
+	})
+	$('.total_list').on('click','.add',function(){
+		$(this).addClass('active');
+		var num = parseInt($(this).siblings('.result').text());
+		var price = $(this).attr('ref');
+		num++;		
+		$(this).siblings('.result').text(num);	
+		//计算价格
+		valid_price(price,'add');
+	})  
+	//关闭按钮
+	$('.close').click(function(){
+		$('.popup').hide();
+	})
+	//////////////////////////////////////////////////////////////
+	function setRightList(id,imgs,name,price){
+		var html = '';
+		html += '<div class="right_single flex justify-between pb-6 mb-6 bg-white border-b border-gray-200">';
+		html += '<div class="rounded-lg overflow-hidden"><img src="./img/food.png" width="91.4px" height="91.4px" alt="food2"></div>';
+		html += '<div class="flex flex-col justify-between ml-2 flex-1">';
+		html += '<div class="text-2xl text-gray-900 mb-3 font-bold">红烧牛烂肉</div>';
+		html += '<div class="flex items-center justify-between">';
+		html += '<div class="cal2 flex items-center justify-between">';
+		html += '<div class="reduce text-gray-600 text-2xl flex items-center justify-center cursor-pointer" ref="18.00">-</div>';
+		html += '<div class="flex-1 text-base text-center result w-11">1</div>';
+		html += '<div class="add text-white text-2xl flex items-center justify-center cursor-pointer" ref="18.00">+</div>';
+		html += '</div>';
+		html += '<div class="text-2xl text-gray-900 font-bold"><span class="text-base font-normal">￥</span><span class="price">18.00</span></div>';
+		html += '</div></div></div>';
+		$('.total_list').append(html);
+	}
+	//计算合计价格
+	function valid_price(price,type){
+		if(type == 'add'){
+			price = parseFloat(price);
+			total_price += price;
+		}else{
+			price = parseFloat(price);
+			total_price -= price;
+		}
+		$('.total_price').text(total_price.toFixed(2));
+	}
+	$('.food_list').scroll(function(e){
+		if(($(this).scrollTop() + $(this).outerHeight() >= $(this).prop('scrollHeight')-100) && flag) {
+			$('.loading').show();
+			flag = false;
+            // 在这里执行你想要的操作
+			getFoodList();
+        }
+	})
+	function getFoodList(){
+		$.ajax({
+			type: 'get',
+			url: 'http://localhost:8080/food/list',
+			dataType: 'json',
+			complete: function(){
+				console.log('123456');
+				var res = [{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},{'name':'红烧牛肉','price':18,'img':'./img/food.png'},]
+				var html = '';
+				for(var i=0;i<res.length;i++){
+					html += '<div class="single flex justify-between p-3 bg-white shadow-lg rounded-lg" ref="'+(i+1)+'">';
+					html += '<div class="rounded-lg overflow-hidden"><img src="'+res[i].img+'" width="158.5px" height="158.5px" alt="food1"></div>';
+					html += '<div class="flex flex-col justify-between ml-4 flex-1 pt-2">';
+					html += '<div class="text-2xl text-gray-900 mb-3 font-bold single_name">'+res[i].name+'('+i+')'+'</div>';
+					html += ' <div class="text-2xl text-gray-900 mb-3 font-bold"><span class="text-base font-normal">￥</span><span class="price">'+res[i].price+'</span></div>';
+					html += '<div class="cal flex items-center justify-between">';
+					html += '<div class="reduce text-gray-600 text-4xl flex items-center justify-center cursor-pointer" ref="'+res[i].price+'">-</div>';
+					html += ' <div class="flex-1 text-3xl text-center result">0</div>';
+					html += '<div class="add text-gray-600 text-4xl flex items-center justify-center cursor-pointer" ref="'+res[i].price+'">+</div>';
+					html += '</div></div></div>';
+				}
+				$('.food_list').prepend(html);
+				flag = true;
+				$('.loading').hide();
+			}	
+		})
+	}
+	getFoodList();
+})
+</script>
+
+</html>
